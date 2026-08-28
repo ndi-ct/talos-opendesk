@@ -1,0 +1,8 @@
+controller:
+  kind: Deployment
+  replicaCount: 1
+  ingressClassResource:
+    enabled: true
+    default: true
+  service:
+    type: LoadBalancer

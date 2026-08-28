@@ -1,0 +1,8 @@
+machine:
+  network:
+    interfaces:
+      - interface: enp108s0
+        addresses: [192.168.3.241/24]
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.3.1

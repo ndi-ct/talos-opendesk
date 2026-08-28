@@ -1,0 +1,21 @@
+machine:
+  install:
+    image: factory.talos.dev/installer/362ccc329c19c726492e2a26a6052dfe6528d65993247077d1c5e6adf18142e7:v1.13.7
+    diskSelector:
+      type: nvme
+  network:
+    interfaces:
+      - interface: enp108s0
+        dhcp: false
+        vip:
+          ip: 192.168.3.240
+    nameservers:
+      - 192.168.3.200
+  kubelet:
+    extraMounts:
+      - destination: /var/lib/longhorn
+        type: bind
+        source: /var/lib/longhorn
+        options: [bind, rshared, rw]
+cluster:
+  allowSchedulingOnControlPlanes: true
