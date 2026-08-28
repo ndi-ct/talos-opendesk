@@ -41,7 +41,7 @@ curl -sI http://192.168.3.246
 kubectl delete deployment nginx-test && kubectl delete service nginx-test-lb
 ```
 
-HAProxy Ingress und TLS prüfen
+HAProxy Ingress und TLS prüfen:
 
 ```
 kubectl create deployment web --image=nginx:alpine
@@ -82,7 +82,7 @@ kubectl delete ingress web-test && kubectl delete deployment web && kubectl dele
 kubectl delete secret web-test-tls
 ```
 
-Es kann sein, dass das Deployment von OpenProject scheitert, weil es sich weigert, Assets von einer privaten IP-Adresse (192.168.3.*) zu laden. 
+Es kann sein, dass das Deployment von OpenProject scheitert, weil es sich weigert, Assets von einer privaten IP-Adresse (192.168.3.*) zu laden (`has no public ip addresses`). 
 In diesem Fall helfen diese Befehle, die den SSRF-Schutz (Server-Side Request Forgery) von OpenProject aushebeln. Nur in einem Testcluster / zur Evaluation anwenden:
 
 ```
