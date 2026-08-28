@@ -19,6 +19,6 @@ spec:
   storageClassName: longhorn
   resources: { requests: { storage: 1Gi } }
 EOF
-kubectl get pvc lh-test        # muss binnen Sekunden Bound werden
+kubectl get pvc lh-test 
 kubectl delete pvc lh-test
 ```
