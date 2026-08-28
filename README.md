@@ -25,7 +25,7 @@ kubectl get pvc lh-test
 kubectl delete pvc lh-test
 ```
 
-Funktionieren HAProxy und MetalLB zusammen?
+IP-Vergabe und ARP-Bekanntmachung von MetalLB prüfen:
 
 ```
 kubectl create deployment nginx-test --image=nginx:alpine
@@ -39,4 +39,45 @@ kubectl get servicel2status -A -o wide
 curl -sI http://192.168.3.246
 
 kubectl delete deployment nginx-test && kubectl delete service nginx-test-lb
+```
+
+HAProxy Ingress und TLS prüfen
+
+```
+kubectl create deployment web --image=nginx:alpine
+
+kubectl expose deployment web --port=80
+
+cat > ingress-test.yaml <<'EOF'
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-test
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: haproxy
+  tls:
+    - hosts: ["portal.opendesk.example.com"]
+      secretName: web-test-tls
+  rules:
+    - host: portal.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service: { name: web, port: { number: 80 } }
+EOF
+
+kubectl apply -f ingress-test.yaml
+
+kubectl get certificate web-test-tls -w      
+
+curl -v https://portal.opendesk.example.com
+
+kubectl delete ingress web-test && kubectl delete deployment web && kubectl delete service web
+
+kubectl delete secret web-test-tls
 ```
