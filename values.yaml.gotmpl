@@ -1,0 +1,19 @@
+global:
+  domain: "opendesk.example.com"
+
+cluster:
+  networking:
+    incomingCIDR:
+      - "192.168.3.0/24"
+    cidr:
+      - "192.168.3.0/24"
+      - "10.244.0.0/16"
+  service:
+    type: "ClusterIP"
+
+certificate:
+  issuerRef:
+    name: "letsencrypt-prod"
+    kind: "ClusterIssuer"
+
+storageClass: "longhorn"
