@@ -62,7 +62,7 @@ spec:
     - hosts: ["portal.opendesk.example.com"]
       secretName: web-test-tls
   rules:
-    - host: portal.example.com
+    - host: portal.opendesk.example.com
       http:
         paths:
           - path: /
@@ -83,7 +83,7 @@ kubectl delete secret web-test-tls
 ```
 
 Es kann sein, dass das Deployment von OpenProject scheitert, weil es sich weigert, Assets von einer privaten IP-Adresse (192.168.3.*) zu laden (`has no public ip addresses`). 
-In diesem Fall helfen diese Befehle, die den SSRF-Schutz (Server-Side Request Forgery) von OpenProject aushebeln. Nur in einem Testcluster / zur Evaluation anwenden:
+In diesem Fall helfen diese Befehle, die den SSRF-Schutz (Server-Side Request Forgery) von OpenProject aushebeln. Nur in einem Testcluster / zur Evaluation anwenden, danach erneut `helmfile apply`:
 
 ```
 grep -n "SSRF__PROTECTION__IP__ALLOWLIST" helmfile/apps/openproject/values.yaml.gotmpl
