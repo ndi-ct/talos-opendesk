@@ -81,3 +81,23 @@ kubectl delete ingress web-test && kubectl delete deployment web && kubectl dele
 
 kubectl delete secret web-test-tls
 ```
+
+Es kann sein, dass das Deployment von OpenProject scheitert, weil es sich weigert, Assets von einer privaten IP-Adresse (192.168.3.*) zu laden. 
+In diesem Fall helfen diese Befehle, die den SSRF-Schutz (Server-Side Request Forgery) von OpenProject aushebeln. Nur in einem Testcluster / zur Evaluation anwenden:
+
+```
+grep -n "SSRF__PROTECTION__IP__ALLOWLIST" helmfile/apps/openproject/values.yaml.gotmpl
+
+sed -i '85a\  OPENPROJECT_SSRF_PROTECTION_IP_ALLOWLIST: {{ join " " .Values.cluster.networking.cidr | quote }}' \
+  helmfile/apps/openproject/values.yaml.gotmpl #85a durch die Zeile ersetzen, die grep im ersten Befehl liefert
+```
+
+```
+grep -n "OPENPROJECT_SEED_DESIGN_LOGO\|OPENPROJECT_SEED_DESIGN_FAVICON\|OPENPROJECT_SEED_DESIGN_TOUCH\|OPENPROJECT_SEED_DESIGN_EXPORT" \
+  helmfile/apps/openproject/values.yaml.gotmpl # liefert 7 Zeilen, beispielsweise 100 bis 107
+
+sed -i \
+  -e '100s|:.*|: ""|' -e '101s|:.*|: ""|' -e '102s|:.*|: ""|' \
+  -e '103s|:.*|: ""|' -e '104s|:.*|: ""|' -e '105s|:.*|: ""|' -e '106s|:.*|: ""|' \
+  helmfile/apps/openproject/values.yaml.gotmpl
+```
