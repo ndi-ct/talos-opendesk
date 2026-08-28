@@ -5,3 +5,20 @@ Vorlagen für den Bau eines Kubernetes-Clusters für openDesk auf Basis von Talo
 
 Bild: Melissa Ramson / heise medien
 
+Nützliche Befehle, falls es bei der Anleitung Probleme gibt:
+
+Prüfen, ob Longhorn als CSI funktioniert:
+
+```
+kubectl apply -f - <<'EOF'
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: { name: lh-test }
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: longhorn
+  resources: { requests: { storage: 1Gi } }
+EOF
+kubectl get pvc lh-test        # muss binnen Sekunden Bound werden
+kubectl delete pvc lh-test
+```
