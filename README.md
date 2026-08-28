@@ -19,6 +19,24 @@ spec:
   storageClassName: longhorn
   resources: { requests: { storage: 1Gi } }
 EOF
+
 kubectl get pvc lh-test 
+
 kubectl delete pvc lh-test
+```
+
+Funktionieren HAProxy und MetalLB zusammen?
+
+```
+kubectl create deployment nginx-test --image=nginx:alpine
+
+kubectl expose deployment nginx-test --port=80 --type=LoadBalancer --name=nginx-test-lb
+
+kubectl get svc nginx-test-lb -w
+
+kubectl get servicel2status -A -o wide 
+
+curl -sI http://192.168.3.246
+
+kubectl delete deployment nginx-test && kubectl delete service nginx-test-lb
 ```
